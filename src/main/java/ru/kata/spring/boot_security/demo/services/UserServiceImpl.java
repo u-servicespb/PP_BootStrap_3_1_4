@@ -11,7 +11,6 @@ import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
 import java.util.List;
 
-
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -48,18 +47,22 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void updateUser(User updateUser, Long id) {
-        User user_from_DB = userRepository.findById(id).get(); //Нашли в БД, кого хотим редактировать
-        user_from_DB.setUsername(updateUser.getUsername());
-        user_from_DB.setRoles((List<Role>) updateUser.getAuthorities());
 
-        if (user_from_DB.getPassword().equals(updateUser.getPassword())) {
-            userRepository.save(user_from_DB);
+        User user = userRepository.getById(id);
+        user.setUsername(updateUser.getUsername());
+        user.setLastname(updateUser.getLastname());
+        user.setAge(updateUser.getAge());
+        user.setEmail(updateUser.getEmail());
+        user.setRoles(updateUser.getRoles());
+        userRepository.save(user);
+
+        if (user.getPassword().equals(updateUser.getPassword())) {
+            userRepository.save(user);
         } else {
-            user_from_DB.setPassword(passwordEncoder.encode(updateUser.getPassword()));
-            userRepository.save(user_from_DB);
+            user.setPassword(passwordEncoder.encode(updateUser.getPassword()));
+            userRepository.save(user);
         }
 
-        userRepository.save(user_from_DB);
     }
 
     @Transactional
