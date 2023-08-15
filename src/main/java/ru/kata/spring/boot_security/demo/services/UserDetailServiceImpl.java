@@ -23,7 +23,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username_from_webpage) throws UsernameNotFoundException {
-        Optional<User> user_from_DB = userRepository.findByUsername(username_from_webpage); //Ищем в БД юзера по имени с формы
+        Optional<User> user_from_DB = userRepository.findByUsername(username_from_webpage);
         if (user_from_DB.isEmpty()) {
             throw new UsernameNotFoundException("Пользователь с таким именем не найден.");
         }
